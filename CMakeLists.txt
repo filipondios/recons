@@ -7,18 +7,25 @@ if (POLICY CMP0141)
 endif()
 
 project ("Objects")
+include("C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake")
 find_package(Clipper2 CONFIG REQUIRED)
 find_package(raylib CONFIG REQUIRED)
 find_package(OpenCV CONFIG REQUIRED)
 find_package(tomlplusplus CONFIG REQUIRED)
+find_package(Eigen3 CONFIG REQUIRED)
 
-add_executable (Objects "src/Objects.cpp")
+add_executable (Objects 
+    "src/Objects.cpp"
+    "src/BaseView.hpp"
+    "src/BaseView.cpp"
+)
 
 target_link_libraries(Objects PRIVATE
     Clipper2::Clipper2
     raylib
     ${OpenCV_LIBS}
     tomlplusplus::tomlplusplus
+    Eigen3::Eigen
 )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
