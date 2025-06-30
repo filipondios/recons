@@ -6,8 +6,8 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-project ("Objects")
-include("C:\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake")
+project("Objects")
+include("$ENV{VCPKG_ROOT}\\scripts\\buildsystems\\vcpkg.cmake")
 find_package(Clipper2 CONFIG REQUIRED)
 find_package(raylib CONFIG REQUIRED)
 find_package(OpenCV CONFIG REQUIRED)
@@ -18,7 +18,7 @@ add_executable (Objects
     "src/Objects.cpp"
     "src/BaseView.hpp"
     "src/BaseView.cpp"
-)
+ "src/BaseModel.cpp")
 
 target_link_libraries(Objects PRIVATE
     Clipper2::Clipper2
