@@ -3,6 +3,7 @@
     "clipper2",
     "opencv",
     "raylib",
-    "tomlplusplus"
+    "tomlplusplus",
+    "eigen3"
   ]
 }
