@@ -1,0 +1,8 @@
+{
+  "dependencies": [
+    "clipper2",
+    "opencv",
+    "raylib",
+    "tomlplusplus"
+  ]
+}
