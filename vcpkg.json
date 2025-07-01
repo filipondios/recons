@@ -1,9 +1,9 @@
 {
   "dependencies": [
-    "clipper2",
-    "opencv",
-    "raylib",
-    "tomlplusplus",
-    "eigen3"
+    { "name": "clipper2", "version>=": "1.5.4" },
+    { "name": "raylib", "version>=": "5.5", "default-features": false  },   
+    { "name": "tomlplusplus", "version>=": "3.4.0" },
+    { "name": "opencv4", "version>=": "4.11.0", "default-features": false },
+    { "name": "eigen3", "version>=": "3.4.0" }
   ]
 }
