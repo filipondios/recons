@@ -21,7 +21,7 @@ All dependencies are managed with vcpkg. They are listed in [vcpkg.json](vcpkg.j
 > otherwise you won't be able to compile the project.
 
 Once you are shure that you have vcpkg and the `$VCPKG_ROOT` variable set, you can clone this repository and
-download and install all this project dependencies at `vcpkg_installed/`:
+download and install all this project dependencies:
 
 ```sh
 git clone https://github.com/filipondios/recons.git
