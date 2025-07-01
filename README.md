@@ -1,12 +1,11 @@
 # recons 
 
-This project is a **C++ port of my project **"object-reconstruction"**. It uses **CMake** as 
-the build system and **vcpkg** for dependency management.
+This project is a **C++** port of my Python project [object-reconstruction](https://github.com/filipondios/object-reconstruction). This project uses [CMake](https://github.com/Kitware/CMake) as  the build system and 
+[vcpkg](https://github.com/microsoft/vcpkg) for dependency management.
 
 ## Dependencies
 
-All dependencies are managed with [vcpkg](https://github.com/microsoft/vcpkg). They are listed in 
-[vcpkg.json](vcpkg.json):
+All dependencies are managed with vcpkg. They are listed in [vcpkg.json](vcpkg.json):
 
 - **opencv4** (image processing)
 - **raylib** (graphics)
@@ -16,9 +15,10 @@ All dependencies are managed with [vcpkg](https://github.com/microsoft/vcpkg). T
 
 ## Building with CMake and vcpkg
 
-The project is designed to work seamlessly with vcpkg. Make sure you have vcpkg and the `$VCPKG_ROOT`
-enviroment variable is set to your path to vcpkg (ex. `C:\\path\\to\\vcpkg` in Windows or `/path/to/vcpkg` in Linux),
-otherwise you won't be able to compile the project.
+> [!IMPORTANT]
+> The project is designed to work seamlessly with vcpkg. Make sure you have vcpkg and the `$VCPKG_ROOT`
+> enviroment variable is set to your path to vcpkg (ex. `C:\\path\\to\\vcpkg` in Windows or `/path/to/vcpkg` in Linux),
+> otherwise you won't be able to compile the project.
 
 ### Windows (Visual Studio)
 
