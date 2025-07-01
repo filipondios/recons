@@ -20,8 +20,8 @@ find_package(OpenCV REQUIRED)
 find_package(tomlplusplus CONFIG REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)
 
-file(GLOB_RECURSE SOURCES "*.cpp")
-file(GLOB_RECURSE HEADERS "*.hpp")
+file(GLOB_RECURSE SOURCES "src/*.cpp")
+file(GLOB_RECURSE HEADERS "src/*.hpp")
 add_executable(ObjRec ${SOURCES} ${HEADERS})
 
 target_link_libraries(ObjRec PRIVATE
