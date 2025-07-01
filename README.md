@@ -8,8 +8,8 @@ This project is a **C++** port of my Python project [object-reconstruction](http
 All dependencies are managed with vcpkg. They are listed in [vcpkg.json](vcpkg.json):
 
 - **opencv4** (image processing)
-- **raylib** (graphics)
-- **clipper2** (geometry)
+- **raylib** (3D Models rendering)
+- **clipper2** (Poligon clipping)
 - **tomlplusplus** (configuration parsing)
 - **eigen3** (linear algebra)
 
