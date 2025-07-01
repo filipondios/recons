@@ -20,6 +20,15 @@ All dependencies are managed with vcpkg. They are listed in [vcpkg.json](vcpkg.j
 > enviroment variable is set to your path to vcpkg (ex. `C:\\path\\to\\vcpkg` in Windows or `/path/to/vcpkg` in Linux),
 > otherwise you won't be able to compile the project.
 
+Once you are shure that you have vcpkg and the `$VCPKG_ROOT` variable set, you can clone this repository and
+download and install all this project dependencies at `vcpkg_installed/`:
+
+```sh
+git clone https://github.com/filipondios/recons.git
+cd recons
+vcpkg install
+```
+
 ### Windows (Visual Studio)
 
 You can open the project folder directly in **Visual Studio** on Windows without any modifications.
