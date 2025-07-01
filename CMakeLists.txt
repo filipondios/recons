@@ -1,5 +1,5 @@
 ﻿cmake_minimum_required (VERSION 3.21)
-project(ObjRec VERSION 1.0.0 LANGUAGES CXX)
+project(recons VERSION 1.0.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -22,9 +22,9 @@ find_package(Eigen3 CONFIG REQUIRED)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 file(GLOB_RECURSE HEADERS "src/*.hpp")
-add_executable(ObjRec ${SOURCES} ${HEADERS})
+add_executable(recons ${SOURCES} ${HEADERS})
 
-target_link_libraries(ObjRec PRIVATE
+target_link_libraries(recons PRIVATE
   Clipper2::Clipper2
   raylib
   ${OpenCV_LIBS}
