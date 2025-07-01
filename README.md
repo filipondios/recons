@@ -9,7 +9,7 @@ All dependencies are managed with vcpkg. They are listed in [vcpkg.json](vcpkg.j
 
 - **opencv4** (image processing)
 - **raylib** (3D Models rendering)
-- **clipper2** (Poligon clipping)
+- **clipper2** (poligon clipping)
 - **tomlplusplus** (configuration parsing)
 - **eigen3** (linear algebra)
 
