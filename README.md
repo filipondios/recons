@@ -8,12 +8,12 @@ All dependencies are managed with vcpkg. They are listed in [vcpkg.json](vcpkg.j
 ```json
 {
   "dependencies": [
-    { "name": "clipper2" },
-    { "name": "raylib" },
-    { "name": "nlohmann-json" },
-    { "name": "opencv4" },
-    { "name": "eigen3" },
-    { "name": "catch2" }
+    { "name": "clipper2", "use": "polygon clipping" },
+    { "name": "raylib", "use": "3D model rendering" },
+    { "name": "nlohmann-json", "use": "config parsing" },
+    { "name": "opencv4", "use": "image processing" },
+    { "name": "eigen3", "use": "linear algebra (ec. systems)" },
+    { "name": "catch2", "use": "tests" }
   ]
 }
 ```
