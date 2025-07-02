@@ -8,22 +8,15 @@ All dependencies are managed with vcpkg. They are listed in [vcpkg.json](vcpkg.j
 ```json
 {
   "dependencies": [
-    { "name": "clipper2", "version>=": "1.5.4", "comment": "pepe" },
-    { "name": "raylib", "version>=": "5.5", "default-features": false  },
-    { "name": "nlohmann-json", "version>=": "3.12.0" },
-    { "name": "opencv4", "version>=": "4.11.0", "default-features": false },
-    { "name": "eigen3", "version>=": "3.4.0" },
-    { "name": "catch2", "version>=": "3.8.1" }
+    { "name": "clipper2" },
+    { "name": "raylib" },
+    { "name": "nlohmann-json" },
+    { "name": "opencv4" },
+    { "name": "eigen3" },
+    { "name": "catch2" }
   ]
 }
 ```
-
-- **opencv4** (image processing)
-- **raylib** (3D model rendering)
-- **clipper2** (polygon clipping)
-- **nlohmann_json** (configuration parsing)
-- **eigen3** (linear algebra)
-- **catch2** (testing)
 
 ## Building with CMake and vcpkg
 > [!IMPORTANT]
