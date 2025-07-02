@@ -5,11 +5,25 @@ This project is a **C++** port of my Python project [object-reconstruction](http
 
 ## Dependencies
 All dependencies are managed with vcpkg. They are listed in [vcpkg.json](vcpkg.json):
+```json
+{
+  "dependencies": [
+    { "name": "clipper2", "version>=": "1.5.4", "comment": "pepe" },
+    { "name": "raylib", "version>=": "5.5", "default-features": false  },
+    { "name": "nlohmann-json", "version>=": "3.12.0" },
+    { "name": "opencv4", "version>=": "4.11.0", "default-features": false },
+    { "name": "eigen3", "version>=": "3.4.0" },
+    { "name": "catch2", "version>=": "3.8.1" }
+  ]
+}
+```
+
 - **opencv4** (image processing)
 - **raylib** (3D model rendering)
 - **clipper2** (polygon clipping)
-- **tomlplusplus** (configuration parsing)
+- **nlohmann_json** (configuration parsing)
 - **eigen3** (linear algebra)
+- **catch2** (testing)
 
 ## Building with CMake and vcpkg
 > [!IMPORTANT]
@@ -38,6 +52,7 @@ preset, you can compile the project. For example:
 # Compile the project for x64 Release mode
 cmake --preset x64-release-linux
 cmake --build --preset x64-release-linux
+
 # Compile the project for x86 Debug mode
 cmake --preset x86-debug-linux
 cmake --build --preset x86-debug-linux
@@ -49,7 +64,7 @@ to provide C++ IDE features to many editors. However, this file needs to be in t
 root of the project. The best option is to create a symlink to the file:
 ```sh
 cd /path/to/recons
-cmake --list-presets
-cmake --preset <preset>
-ln -s out/build/<preset>/compile_commands.json compile_commands.json
+PRESET="x64-release-linux"
+cmake --preset $PRESET
+ln -s out/build/$PRESET/compile_commands.json compile_commands.json
 ```
