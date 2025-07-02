@@ -17,4 +17,5 @@ struct BaseView {
 	BaseView(const std::filesystem::path& path);
 	Vector3 plane_to_real(const Vector2& point);
 	Vector2 real_to_plane(const Vector3& point);
+	std::string to_string(void) const;
 };

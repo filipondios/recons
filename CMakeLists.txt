@@ -17,17 +17,23 @@ endif()
 find_package(Clipper2 CONFIG REQUIRED)
 find_package(raylib CONFIG REQUIRED)
 find_package(OpenCV REQUIRED)
-find_package(tomlplusplus CONFIG REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)
+find_package(nlohmann_json CONFIG REQUIRED)
+find_package(Catch2 CONFIG REQUIRED)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 file(GLOB_RECURSE HEADERS "src/*.hpp")
-add_executable(recons ${SOURCES} ${HEADERS})
+list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/Main.cpp")
+add_library(recons_lib ${SOURCES} ${HEADERS})
 
-target_link_libraries(recons PRIVATE
+target_link_libraries(recons_lib PUBLIC
   Clipper2::Clipper2
   raylib
   ${OpenCV_LIBS}
-  tomlplusplus::tomlplusplus
   Eigen3::Eigen
+  nlohmann_json::nlohmann_json
 )
+
+add_executable(recons "src/Main.cpp")
+target_link_libraries(recons PRIVATE recons_lib)
+add_subdirectory(tests)
