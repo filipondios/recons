@@ -1,3 +1,1 @@
-﻿#include <cstdlib>
-
-int main(void) { return EXIT_SUCCESS; }
+﻿int main(void) { return 0; }
