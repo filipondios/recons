@@ -1,0 +1,7 @@
+{
+  "name": "elevation (with errors)",
+  "origin": [40,0,0],
+  "vx": ["1", "0", "0"],
+  "vy": [-1,0,0],
+  "vz": 3
+}
