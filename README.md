@@ -61,3 +61,8 @@ PRESET="x64-release-linux"
 cmake --preset $PRESET
 ln -s out/build/$PRESET/compile_commands.json compile_commands.json
 ```
+
+> [!NOTE]
+> After running build commands (either in Windows or Linux) with a preset `<preset>`, you should find the application executable file at `out/build/<preset>/` and the tests executable file at `out/build/<preset>/tests/`. The application binary must be named `recons` and the tests binary `recons_tests`.
+
+
