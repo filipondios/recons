@@ -7,6 +7,7 @@
 BaseModel::BaseModel(const std::filesystem::path &path) {
   if (!std::filesystem::exists(path))
     throw std::runtime_error("Not a valid path: " + path.string());
+  this->path = path;
 
   for (const auto& entry : std::filesystem::directory_iterator(path)) {
     if (entry.is_directory()) {
@@ -16,7 +17,7 @@ BaseModel::BaseModel(const std::filesystem::path &path) {
         std::cout << view.to_string() << std::endl;
 
       } catch (const std::exception &e) {
-        std::cerr << "Invalid view: "<< entry.path() << ":"
+        std::cerr << "Invalid view: "<< entry.path() << ": "
            << e.what() << std::endl;
       }
     }

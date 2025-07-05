@@ -1,20 +1,15 @@
-#include "BaseView.hpp"
-#include <Eigen/Dense>
-#include <filesystem>
 #include <fstream>
-#include <nlohmann/json_fwd.hpp>
-#include <string>
 #include <nlohmann/json.hpp>
-#include <vector>
+#include <Eigen/Dense>
+#include "BaseView.hpp"
 
 
-void ensure_vector_format(const nlohmann::basic_json<> &item, const std::string &field,
-                          const std::filesystem::path &path) {
+void ensure_vector_format(const nlohmann::basic_json<> &item, const std::string &field) {
   if (!item.is_array() || item.size() != 3 ||
     !item[0].is_number() ||
     !item[1].is_number() ||
     !item[2].is_number()) {
-    throw std::runtime_error("Invalid field '" + field + "' at: " + path.string());
+    throw std::runtime_error("Invalid field '" + field + "'");
   }
 }
 
@@ -24,7 +19,7 @@ BaseView::BaseView(const std::filesystem::path &path) {
 
   if (!std::filesystem::exists(camera_path) ||
       !std::filesystem::exists(plane_path)) {
-    throw std::runtime_error("Missing required files at: " + path.string());    
+    throw std::runtime_error("Missing required files");    
   }
 
   std::ifstream camera_stream(camera_path.string());
@@ -33,16 +28,16 @@ BaseView::BaseView(const std::filesystem::path &path) {
   if (!camera_data.contains("name") || !camera_data.contains("origin") ||
       !camera_data.contains("vx") || !camera_data.contains("vy") ||
       !camera_data.contains("vz")) {
-    throw std::runtime_error("Missing fields at: " + path.string());    
+    throw std::runtime_error("Missing fields");    
   }
 
-  ensure_vector_format(camera_data["origin"], "origin", path);
-  ensure_vector_format(camera_data["vx"], "vx", path);
-  ensure_vector_format(camera_data["vy"], "vy", path);
-  ensure_vector_format(camera_data["vz"], "vz", path);
+  ensure_vector_format(camera_data["origin"], "origin");
+  ensure_vector_format(camera_data["vx"], "vx");
+  ensure_vector_format(camera_data["vy"], "vy");
+  ensure_vector_format(camera_data["vz"], "vz");
 
   if (!camera_data["name"].is_string()) {
-    throw std::runtime_error("Invalid field 'name' at: " + path.string());
+    throw std::runtime_error("Invalid field 'name'");
   }
 
   const std::vector<float> &origin = camera_data["origin"];  
@@ -60,10 +55,10 @@ BaseView::BaseView(const std::filesystem::path &path) {
 
 Vector3 BaseView::plane_to_real(const Vector2 &point) {
   // Could've used Raylib's Vector3Add and Vector3Scale, but thats a lot of calls
-  const float x{this->origin.x + (this->vx.x * point.x) + (this->vz.x * point.y)};
-  const float y{this->origin.y + (this->vx.y * point.x) + (this->vz.y * point.y)};
-  const float z{this->origin.z + (this->vx.z * point.x) + (this->vz.z * point.y)};
-  return Vector3{x, y, z};
+  const float x{ this->origin.x + (this->vx.x * point.x) + (this->vz.x * point.y) };
+  const float y{ this->origin.y + (this->vx.y * point.x) + (this->vz.y * point.y) };
+  const float z{ this->origin.z + (this->vx.z * point.x) + (this->vz.z * point.y) };
+  return Vector3{ x, y, z };
 }
 
 Vector2 BaseView::real_to_plane(const Vector3 &point) {
@@ -85,8 +80,8 @@ Vector2 BaseView::real_to_plane(const Vector3 &point) {
 
 std::string vector_to_string(const Vector3 &vector) {
   const auto x = std::to_string(vector.x);
-  const auto y = std::to_string(vector.x);
-  const auto z = std::to_string(vector.x);
+  const auto y = std::to_string(vector.y);
+  const auto z = std::to_string(vector.z);
   return "[" + x + "," + y + "," + z + "]";
 }
 
