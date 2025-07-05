@@ -1,5 +1,8 @@
-
 # recons
+
+>[!WARNING]
+> This repository is still under construction and does not yet offer a complete application.
+
 This project is a **C++** port of my Python project [object-reconstruction](https://github.com/filipondios/object-reconstruction). This project uses [CMake](https://github.com/Kitware/CMake) as the build system and
 [vcpkg](https://github.com/microsoft/vcpkg) for dependency management.
 
