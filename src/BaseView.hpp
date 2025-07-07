@@ -1,9 +1,10 @@
 #pragma once
 
+#include <clipper2/clipper.core.h>
 #include <string>
 #include <filesystem>
 #include <raymath.h>
-#include <opencv2/opencv.hpp>
+#include <clipper2/clipper.h>
 
 struct BaseView {
 
@@ -12,7 +13,7 @@ struct BaseView {
 	Vector3 vx;
 	Vector3 vy;
 	Vector3 vz;
-	cv::Mat projection;
+	Clipper2Lib::PathsD polygon;
 
 	BaseView(const std::filesystem::path& path);
 	Vector3 plane_to_real(const Vector2& point);

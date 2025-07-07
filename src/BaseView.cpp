@@ -1,6 +1,7 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 #include <Eigen/Dense>
+#include <opencv2/opencv.hpp>
 #include "BaseView.hpp"
 
 
@@ -40,6 +41,7 @@ BaseView::BaseView(const std::filesystem::path &path) {
     throw std::runtime_error("Invalid field 'name'");
   }
 
+  // Initialize the view's camera position and orientation
   const std::vector<float> &origin = camera_data["origin"];  
   const std::vector<float> &vx = camera_data["vx"]; 
   const std::vector<float> &vy = camera_data["vy"]; 
@@ -50,7 +52,15 @@ BaseView::BaseView(const std::filesystem::path &path) {
   this->vx = Vector3 { vx[0], vx[1], vx[2] };
   this->vy = Vector3 { vy[0], vy[1], vy[2] };
   this->vz = Vector3 { vz[0], vz[1], vz[2] };
-  this->projection = cv::imread(plane_path.string(), cv::IMREAD_GRAYSCALE);
+
+  // Load the view's projection
+  cv::Mat src, dst;
+  src = cv::imread(plane_path.string(), cv::IMREAD_GRAYSCALE);
+  cv::threshold(src, src, 254, 255, cv::THRESH_BINARY_INV);
+  cv::Mat laplacian = (cv::Mat_<char>(3,3) << -1, -1, -1, -1, 8, -1, -1, -1, -1);
+  cv::filter2D(src, dst, -1, laplacian);
+
+  // Extract the polygonal line from the view's contour
 }
 
 Vector3 BaseView::plane_to_real(const Vector2 &point) {
