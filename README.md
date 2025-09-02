@@ -33,23 +33,3 @@ cmake --build --preset x64-release-linux
 cmake --preset x86-debug-windows
 cmake --build --preset x86-debug-windows
 ```
-
-> [!IMPORTANT]
-> After running build commands (either in Windows or Linux) with a preset `<preset>`, you should
-> find the application static library file at `out/build/<preset>/` and the tests executable file at
-> `out/build/<preset>/tests/`. The application binary must be named `libmceliece.a` (Linux) or `libmceliece.lib`
-> (Windows) and the tests binary
-> `mceliece_tests`.
-
-Once you run the command `cmake --preset <preset>`, the `out/build/<preset>/compile_commands.json`
-file will be created. This file is used by the [clangd](https://github.com/clangd/clangd) LSP
-to provide C/C++ IDE features to many editors. However, this file needs to be in the
-root of the project. The best option is to create a symlink to the file:
-
-```sh
-cd /path/to/mceliece
-PRESET="x64-release-linux"
-cmake --preset $PRESET
-ln -s out/build/$PRESET/compile_commands.json compile_commands.json
-```
-
