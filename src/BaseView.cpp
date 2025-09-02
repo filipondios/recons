@@ -1,7 +1,10 @@
 #include <fstream>
-#include <nlohmann/json.hpp>
+#include <json/config.h>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/imgproc.hpp>
+#include <json/json.h>
 #include <Eigen/Dense>
-#include <opencv2/opencv.hpp>
+#include <nlohmann/json.hpp>
 #include "BaseView.hpp"
 
 
@@ -27,8 +30,8 @@ BaseView::BaseView(const std::filesystem::path &path) {
   nlohmann::json camera_data = nlohmann::json::parse(camera_stream);
 
   if (!camera_data.contains("name") || !camera_data.contains("origin") ||
-      !camera_data.contains("vx") || !camera_data.contains("vy") ||
-      !camera_data.contains("vz")) {
+    !camera_data.contains("vx") || !camera_data.contains("vy") ||
+    !camera_data.contains("vz")) {
     throw std::runtime_error("Missing fields");    
   }
 
@@ -73,15 +76,15 @@ Vector3 BaseView::plane_to_real(const Vector2 &point) {
 
 Vector2 BaseView::real_to_plane(const Vector3 &point) {
   const Eigen::Matrix<float, 3, 1> delta{
-      point.x - this->origin.x,
-      point.y - this->origin.y,
-      point.z - this->origin.z,
+    point.x - this->origin.x,
+    point.y - this->origin.y,
+    point.z - this->origin.z,
   };
 
   const Eigen::Matrix<float, 3, 2> coeffs{
-      {this->vx.x, this->vz.x},
-      {this->vx.y, this->vz.y},
-      {this->vx.z, this->vz.z},
+    {this->vx.x, this->vz.x},
+    {this->vx.y, this->vz.y},
+    {this->vx.z, this->vz.z},
   };
 
   const auto sol = coeffs.colPivHouseholderQr().solve(delta);
@@ -97,8 +100,8 @@ std::string vector_to_string(const Vector3 &vector) {
 
 std::string BaseView::to_string(void) const {
   return "[" + this->name + "]"
-        + "\norigin = " + vector_to_string(this->origin)
-        + "\nvx = " + vector_to_string(this->vx)
-        + "\nvy = " + vector_to_string(this->vy)
-        + "\nvz = " + vector_to_string(this->vz) + "\n";
+    + "\norigin = " + vector_to_string(this->origin)
+    + "\nvx = " + vector_to_string(this->vx)
+    + "\nvy = " + vector_to_string(this->vy)
+    + "\nvz = " + vector_to_string(this->vz) + "\n";
 }

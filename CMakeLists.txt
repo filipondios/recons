@@ -6,123 +6,114 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-function(cache_force VAR VAL)
-  set(${VAR} ${VAL} CACHE INTERNAL "" FORCE)
+# Disable unnecessary libraries features
+function(configure_dependency VAR VAL)
+    set(${VAR} ${VAL} CACHE INTERNAL "" FORCE)
 endfunction()
 
-# ==== Clipper2 ====
-cache_force(CLIPPER2_TESTS OFF)
-cache_force(CLIPPER2_EXAMPLES OFF)
+configure_dependency(CLIPPER2_TESTS OFF)
+configure_dependency(CLIPPER2_EXAMPLES OFF)
+configure_dependency(JSON_BuildTests OFF)
+configure_dependency(EIGEN_BUILD_DOC OFF)
+configure_dependency(EIGEN_BUILD_TESTING OFF)
+configure_dependency(CATCH_BUILD_TESTING OFF)
+configure_dependency(CATCH_BUILD_EXAMPLES OFF)
+configure_dependency(CATCH_INSTALL_DOCS OFF)
 
-# ==== nlohmann-json ====
-cache_force(JSON_BuildTests OFF)
-
-# ==== Eigen3 ====
-cache_force(EIGEN_BUILD_DOC OFF)
-cache_force(EIGEN_BUILD_TESTING OFF)
-
-# ==== Catch2 ====
-cache_force(CATCH_BUILD_TESTING OFF)
-cache_force(CATCH_BUILD_EXAMPLES OFF)
-cache_force(CATCH_INSTALL_DOCS OFF)
-
-# ==== raylib ====
-cache_force(RAYLIB_BUILD_EXAMPLES OFF)
-cache_force(RAYLIB_BUILD_TESTS OFF)
+set(RAYLIB_BACKEND "X11" CACHE STRING "Linux backend for raylib: X11 or Wayland")
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(RAYLIB_BACKEND "X11" CACHE STRING "Linux backend for raylib: X11 or Wayland")
-if (WIN32)
-  set(PLATFORM Desktop CACHE STRING "" FORCE)
+
+if(WIN32)
+    set(PLATFORM Desktop CACHE STRING "" FORCE)
 elseif(UNIX AND NOT APPLE)
-  set(PLATFORM Desktop CACHE STRING "" FORCE)
-  if (RAYLIB_BACKEND STREQUAL "Wayland")
-    set(GLFW_BUILD_WAYLAND ON  CACHE BOOL "" FORCE)
-    set(GLFW_BUILD_X11     OFF CACHE BOOL "" FORCE)
-  else()
-    set(GLFW_BUILD_WAYLAND OFF CACHE BOOL "" FORCE)
-    set(GLFW_BUILD_X11     ON  CACHE BOOL "" FORCE)
-  endif()
+    set(PLATFORM Desktop CACHE STRING "" FORCE)
+    if(RAYLIB_BACKEND STREQUAL "Wayland")
+        set(GLFW_BUILD_WAYLAND ON CACHE BOOL "" FORCE)
+        set(GLFW_BUILD_X11 OFF CACHE BOOL "" FORCE)
+    else()
+        set(GLFW_BUILD_WAYLAND OFF CACHE BOOL "" FORCE)
+        set(GLFW_BUILD_X11 ON CACHE BOOL "" FORCE)
+    endif()
 endif()
 
-# ==== OpenCV (core,imgproc,imgcodecs) ====
-cache_force(BUILD_LIST "core,imgproc,imgcodecs")
-cache_force(BUILD_EXAMPLES OFF)
-cache_force(BUILD_TESTS OFF)
-cache_force(BUILD_PERF_TESTS OFF)
-cache_force(BUILD_DOCS OFF)
-cache_force(BUILD_opencv_apps OFF)
-cache_force(BUILD_opencv_js OFF)
-cache_force(BUILD_PACKAGE OFF)
-cache_force(BUILD_ANDROID_PROJECTS OFF)
-cache_force(BUILD_ANDROID_EXAMPLES OFF)
-cache_force(BUILD_JAVA OFF)
-cache_force(BUILD_OBJC OFF)
-cache_force(BUILD_KOTLIN_EXTENSIONS OFF)
-cache_force(WITH_GTK OFF)
-cache_force(WITH_QT OFF)
-cache_force(WITH_VTK OFF)
-cache_force(WITH_FFMPEG OFF)
-cache_force(WITH_GSTREAMER OFF)
-cache_force(WITH_V4L OFF)
-cache_force(WITH_AVFOUNDATION OFF)
-cache_force(WITH_MSMF OFF)
-cache_force(WITH_DSHOW OFF)
-cache_force(WITH_CUDA OFF)
-cache_force(WITH_OPENCL OFF)
-cache_force(WITH_TBB OFF)
-cache_force(WITH_IPP OFF)
-cache_force(WITH_OPENGL OFF)
-cache_force(WITH_VULKAN OFF)
-cache_force(WITH_ITT OFF)
-cache_force(WITH_EIGEN OFF)
-cache_force(WITH_PNG OFF)
-cache_force(WITH_JPEG OFF)
-cache_force(WITH_TIFF OFF)
-cache_force(WITH_WEBP OFF)
-cache_force(WITH_AVIF OFF)
-cache_force(WITH_JASPER OFF)
-cache_force(WITH_OPENJPEG OFF)
-cache_force(WITH_JPEGXL OFF)
-cache_force(WITH_IMGCODEC_GIF OFF)
-cache_force(WITH_IMGCODEC_HDR OFF)
-cache_force(WITH_IMGCODEC_SUNRASTER OFF)
-cache_force(WITH_IMGCODEC_PXM OFF)
-cache_force(WITH_IMGCODEC_PFM OFF)
-cache_force(OPENCV_FORCE_3RDPARTY_BUILD OFF)
-cache_force(BUILD_ZLIB OFF)
-cache_force(BUILD_PNG OFF)
-cache_force(BUILD_JPEG OFF)
-cache_force(BUILD_TIFF OFF)
-cache_force(BUILD_OPENEXR OFF)
-cache_force(BUILD_WEBP OFF)
+configure_dependency(BUILD_LIST "core,imgproc,imgcodecs")
+set(OPENCV_DISABLE_LIST BUILD_EXAMPLES BUILD_TESTS BUILD_PERF_TESTS
+    BUILD_DOCS BUILD_opencv_apps BUILD_opencv_js BUILD_ANDROID_PROJECTS 
+    BUILD_ANDROID_EXAMPLES BUILD_JAVA BUILD_OBJC BUILD_KOTLIN_EXTENSIONS)
 
-# ==== dependencies ====
-add_subdirectory(third_party/clipper2)
-add_subdirectory(third_party/nlohmann_json)
-add_subdirectory(third_party/eigen)
-add_subdirectory(third_party/catch2)
-add_subdirectory(third_party/raylib)
-add_subdirectory(third_party/opencv opencv_build)
+foreach(ITEM ${OPENCV_DISABLE_LIST})
+    configure_dependency(${ITEM} OFF)
+endforeach()
 
-# ==== project files ====
-file(GLOB_RECURSE SOURCES "src/*.cpp")
-file(GLOB_RECURSE HEADERS "src/*.hpp")
-list(REMOVE_ITEM SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/Main.cpp")
+set(OPENCV_UI_BACKENDS WITH_GTK WITH_QT WITH_VTK WITH_FFMPEG
+    WITH_GSTREAMER WITH_V4L WITH_AVFOUNDATION WITH_MSMF WITH_DSHOW)
 
-add_library(recons_lib ${SOURCES} ${HEADERS})
-target_include_directories(recons_lib PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/src")
+foreach(BACKEND ${OPENCV_UI_BACKENDS})
+    configure_dependency(${BACKEND} OFF)
+endforeach()
+
+set(OPENCV_HW_ACCELERATION WITH_CUDA WITH_OPENCL WITH_TBB WITH_IPP
+    WITH_OPENGL WITH_VULKAN WITH_ITT WITH_VA WITH_VA_INTEL)
+
+foreach(HW ${OPENCV_HW_ACCELERATION})
+    configure_dependency(${HW} OFF)
+endforeach()
+
+set(OPENCV_IMAGE_FORMATS WITH_PNG WITH_JPEG WITH_TIFF WITH_WEBP
+    WITH_AVIF WITH_JASPER WITH_OPENJPEG WITH_JPEGXL WITH_IMGCODEC_GIF
+    WITH_IMGCODEC_HDR WITH_IMGCODEC_SUNRASTER WITH_IMGCODEC_PXM 
+    WITH_IMGCODEC_PFM WITH_OPENEXR)
+
+foreach(FORMAT ${OPENCV_IMAGE_FORMATS})
+    configure_dependency(${FORMAT} OFF)
+endforeach()
+
+set(OPENCV_3RDPARTY_BUILDS OPENCV_FORCE_3RDPARTY_BUILD BUILD_ZLIB
+    BUILD_PNG BUILD_JPEG BUILD_TIFF BUILD_OPENEXR BUILD_WEBP)
+
+foreach(BUILD ${OPENCV_3RDPARTY_BUILDS})
+    configure_dependency(${BUILD} OFF)
+endforeach()
+
+configure_dependency(WITH_EIGEN OFF)
+configure_dependency(WITH_PROTOBUF OFF)
+configure_dependency(WITH_FLATBUFFERS OFF)
+set(OPENCV_CONFIG_FILE_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/opencv_build" CACHE PATH "" FORCE)
+
+# Add each dependency of the project
+add_subdirectory(external/Clipper2/CPP)
+add_subdirectory(external/json)
+add_subdirectory(external/eigen)
+add_subdirectory(external/Catch2)
+add_subdirectory(external/raylib)
+add_subdirectory(external/opencv opencv_build)
+
+# Obtain all the files from the project
+file(GLOB_RECURSE RECONS_SOURCES "src/*.cpp")
+file(GLOB_RECURSE RECONS_HEADERS "src/*.hpp")
+list(REMOVE_ITEM RECONS_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/Main.cpp")
+
+add_library(recons_lib ${RECONS_SOURCES} ${RECONS_HEADERS})
+target_include_directories(recons_lib PUBLIC
+    "${CMAKE_CURRENT_SOURCE_DIR}/src"
+    "${CMAKE_CURRENT_SOURCE_DIR}/external/opencv/modules/core/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/external/opencv/modules/imgproc/include"
+    "${CMAKE_CURRENT_SOURCE_DIR}/external/opencv/modules/imgcodecs/include"
+    "${CMAKE_CURRENT_BINARY_DIR}/opencv_build"
+)
+
+# Link all dependencies
 target_link_libraries(recons_lib PUBLIC
-  Clipper2::Clipper2
-  raylib
-  opencv_core
-  opencv_imgproc
-  opencv_imgcodecs
-  Eigen3::Eigen
-  nlohmann_json::nlohmann_json
+    Clipper2
+    raylib
+    opencv_core
+    opencv_imgproc
+    opencv_imgcodecs
+    Eigen3::Eigen
+    nlohmann_json::nlohmann_json
 )
 
 add_executable(recons "src/Main.cpp")
 target_link_libraries(recons PRIVATE recons_lib)
-#add_subdirectory(tests)
