@@ -10,10 +10,10 @@ This project is a **C++** port of my Python project [object-reconstruction](http
 First of all, after cloning this project's repository, you need to initialize the git submodules, which in
 this case are the dependencies [Catch2 3.10.0](https://github.com/catchorg/Catch2/tree/25319fd3047c6bdcf3c0170e76fa526c77f99ca9),
 [Clipper2 1.5.4](https://github.com/AngusJohnson/Clipper2/tree/ef88ee97c0e759792e43a2b2d8072def6c9244e8),
-[lohmann-json 3.12.0](https://github.com/nlohmann/json/tree/55f93686c01528224f448c19128836e7df245f72),
-[eigen 3.4.0](https://gitlab.com/libeigen/eigen),
-[opencv 4.12.0](https://github.com/opencv/opencv/tree/49486f61fb25722cbcf586b7f4320921d46fb38e) and 
-[raylib 5.5](https://github.com/raysan5/raylib/tree/c1ab645ca298a2801097931d1079b10ff7eb9df8).
+[Lohmann-json 3.12.0](https://github.com/nlohmann/json/tree/55f93686c01528224f448c19128836e7df245f72),
+[Eigen 3.4.0](https://gitlab.com/libeigen/eigen),
+[Opencv 4.12.0](https://github.com/opencv/opencv/tree/49486f61fb25722cbcf586b7f4320921d46fb38e) and 
+[Raylib 5.5](https://github.com/raysan5/raylib/tree/c1ab645ca298a2801097931d1079b10ff7eb9df8).
 
 ```bash
 git clone https://github.com/filipondios/mceliece
