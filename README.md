@@ -1,71 +1,55 @@
 # recons
 
+This project is a **C++** port of my Python project [object-reconstruction](https://github.com/filipondios/object-reconstruction).
+
 >[!WARNING]
 > This repository is still under construction and does not yet offer a complete application.
 
-This project is a **C++** port of my Python project [object-reconstruction](https://github.com/filipondios/object-reconstruction). This project uses [CMake](https://github.com/Kitware/CMake) as the build system and
-[vcpkg](https://github.com/microsoft/vcpkg) for dependency management.
+## Building with CMake
 
-## Dependencies
-All dependencies are managed with vcpkg. They are listed in [vcpkg.json](vcpkg.json):
-```json
-{
-  "dependencies": [
-    { "name": "clipper2", "use": "polygon clipping" },
-    { "name": "raylib", "use": "3D model rendering" },
-    { "name": "nlohmann-json", "use": "config parsing" },
-    { "name": "opencv4", "use": "image processing" },
-    { "name": "eigen3", "use": "linear algebra (ec. systems)" },
-    { "name": "catch2", "use": "tests" }
-  ]
-}
+First of all, after cloning this project's repository, you need to initialize the git submodules, which in
+this case are the dependencies [Catch2 3.10.0](https://github.com/catchorg/Catch2/tree/25319fd3047c6bdcf3c0170e76fa526c77f99ca9),
+[Clipper2 1.5.4](https://github.com/AngusJohnson/Clipper2/tree/ef88ee97c0e759792e43a2b2d8072def6c9244e8),
+[lohmann-json 3.12.0](https://github.com/nlohmann/json/tree/55f93686c01528224f448c19128836e7df245f72),
+[eigen 3.4.0](https://gitlab.com/libeigen/eigen),
+[opencv 4.12.0](https://github.com/opencv/opencv/tree/49486f61fb25722cbcf586b7f4320921d46fb38e) and 
+[raylib 5.5](https://github.com/raysan5/raylib/tree/c1ab645ca298a2801097931d1079b10ff7eb9df8).
+
+```bash
+git clone https://github.com/filipondios/mceliece
+git submodule update --init --recursive
 ```
 
-## Building with CMake and vcpkg
-> [!IMPORTANT]
-> The project is designed to work seamlessly with vcpkg. Make sure you have vcpkg installed and the `$VCPKG_ROOT`
-> environment variable is set to your vcpkg path (e.g., `C:\\path\\to\\vcpkg` on Windows or `/path/to/vcpkg` on Linux),
-> otherwise you won't be able to compile the project.
+The `CMakePresets.json` file supports building for `x64` and `x86` architectures, in any mode `debug` or `release` for 
+Linux and Windows. The compilation process is very simple: first you must choose a preset and the compile that preset.
+These are some examples:
 
-Once you are sure that you have vcpkg and the `$VCPKG_ROOT` variable set, you can clone this repository and
-download and install all the project dependencies:
 ```sh
-git clone https://github.com/filipondios/recons.git
-cd recons
-vcpkg install
-```
-
-### Windows (Visual Studio)
-You can open the project folder directly in **Visual Studio** on Windows without any modifications.
-Visual Studio automatically detects the CMakePresets and vcpkg integration. It supports building and running
-in all configurations (x64, x86, Debug and Release).
-
-### Linux
-Similar to Windows, there are existing presets for compiling the project (you can see them in
-[CMakePresets.json](CMakePresets.json)). Once you choose a
-preset, you can compile the project. For example:
-```sh
-# Compile the project for x64 Release mode
+# Compile the project for x64 linux release mode
 cmake --preset x64-release-linux
 cmake --build --preset x64-release-linux
 
-# Compile the project for x86 Debug mode
-cmake --preset x86-debug-linux
-cmake --build --preset x86-debug-linux
+# Compile the project for x86 windows debug mode
+cmake --preset x86-debug-windows
+cmake --build --preset x86-debug-windows
 ```
+
+> [!IMPORTANT]
+> After running build commands (either in Windows or Linux) with a preset `<preset>`, you should
+> find the application static library file at `out/build/<preset>/` and the tests executable file at
+> `out/build/<preset>/tests/`. The application binary must be named `libmceliece.a` (Linux) or `libmceliece.lib`
+> (Windows) and the tests binary
+> `mceliece_tests`.
 
 Once you run the command `cmake --preset <preset>`, the `out/build/<preset>/compile_commands.json`
 file will be created. This file is used by the [clangd](https://github.com/clangd/clangd) LSP
-to provide C++ IDE features to many editors. However, this file needs to be in the
+to provide C/C++ IDE features to many editors. However, this file needs to be in the
 root of the project. The best option is to create a symlink to the file:
+
 ```sh
-cd /path/to/recons
+cd /path/to/mceliece
 PRESET="x64-release-linux"
 cmake --preset $PRESET
 ln -s out/build/$PRESET/compile_commands.json compile_commands.json
 ```
-
-> [!NOTE]
-> After running build commands (either in Windows or Linux) with a preset `<preset>`, you should find the application executable file at `out/build/<preset>/` and the tests executable file at `out/build/<preset>/tests/`. The application binary must be named `recons` and the tests binary `recons_tests`.
-
 
