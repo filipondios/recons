@@ -26,10 +26,14 @@ These are some examples:
 
 ```sh
 # Compile the project for x64 linux release mode
-cmake --preset x64-release-linux
-cmake --build --preset x64-release-linux
+cmake --preset x64-release-linux-x11
+cmake --build --preset x64-release-linux-x11
 
 # Compile the project for x86 windows debug mode
 cmake --preset x86-debug-windows
 cmake --build --preset x86-debug-windows
 ```
+> [!IMPORTANT]
+> Since Linux offers the [X11](https://www.x.org/) and [Wayland](https://gitlab.freedesktop.org/wayland/wayland) windowing protocols,
+> this project also adds supports for both systems. For example, the presets `x64-debug-linux-x11` and `x64-debug-linux-wayland`
+> are equivalent.
