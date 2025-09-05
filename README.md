@@ -1,6 +1,6 @@
 # recons
 
-This project is a **C++** port of my Python project [object-reconstruction](https://github.com/filipondios/object-reconstruction).
+This project is a partial **C++** port of my Python project [object-reconstruction](https://github.com/filipondios/object-reconstruction).
 
 >[!WARNING]
 > This repository is still under construction and does not yet offer a complete application.
