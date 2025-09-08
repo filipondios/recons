@@ -161,7 +161,7 @@ View::View(const std::filesystem::path &path) {
   }
 }
 
-Vector3 View::plane_to_real(const Vector2 &point) {
+Vector3 View::plane_to_real(const Vector2 &point) const {
   // Could've used Raylib's Vector3Add and Vector3Scale, but thats a lot of calls
   const float x{ this->origin.x + (this->vx.x * point.x) + (this->vz.x * point.y) };
   const float y{ this->origin.y + (this->vx.y * point.x) + (this->vz.y * point.y) };
@@ -169,7 +169,7 @@ Vector3 View::plane_to_real(const Vector2 &point) {
   return Vector3{ x, y, z };
 }
 
-Vector2 View::real_to_plane(const Vector3 &point) {
+Vector2 View::real_to_plane(const Vector3 &point) const {
   const Eigen::Matrix<float, 3, 1> delta{
     point.x - this->origin.x,
     point.y - this->origin.y,
@@ -184,6 +184,49 @@ Vector2 View::real_to_plane(const Vector3 &point) {
 
   const auto sol = coeffs.colPivHouseholderQr().solve(delta);
   return Vector2{sol(0), sol(1)};
+}
+
+bool View::is_point_inside_contour(const Vector2& point) const {
+  if (polygon.empty() || polygon[0].empty()) {
+    return false;
+  }
+    
+  const auto& path = polygon[0];
+  bool inside = false;
+  size_t j = path.size() - 1;
+
+  // Use ray-casting to chek if the point is inside the
+  // view's contour polygon
+  for (size_t i = 0; i < path.size(); i++) {
+    const auto& pi = path[i];
+    const auto& pj = path[j];
+        
+    if (((pi.y > point.y) != (pj.y > point.y)) &&
+      (point.x < (pj.x - pi.x) * (point.y - pi.y) / (pj.y - pi.y) + pi.x)) {
+      inside = !inside;
+      break;
+    }
+    j = i;
+  }
+  return inside;
+}
+
+std::array<float, VNUM_BOUNDS> View::get_bounds(void) const {
+  if (polygon.empty() || polygon[0].empty()) {
+    return {0.0, 0.0, 0.0, 0.0};
+  }
+
+  const auto& path = polygon[0];
+  float min_x = path[0].x, max_x = path[0].x;
+  float min_y = path[0].y, max_y = path[0].y;
+    
+  for (const auto& point : path) {
+    min_x = std::min(min_x, static_cast<float>(point.x));
+    max_x = std::max(max_x, static_cast<float>(point.x));
+    min_y = std::min(min_y, static_cast<float>(point.y));
+    max_y = std::max(max_y, static_cast<float>(point.y));
+  }
+  return {min_x, min_y, max_x, max_y};
 }
 
 std::string vector_to_string(const Vector3 &vector) {
@@ -201,7 +244,7 @@ std::string View::to_string(void) const {
     + "\nvz = " + vector_to_string(this->vz) + "\n";
 }
 
-View::Direction View::get_direction(void) {
+View::Direction View::get_direction(void) const {
   // Return the axis of the space aligned with vy
   const Vector3 axisX = {1.0f, 0.0f, 0.0f};
   const Vector3 axisY = {0.0f, 1.0f, 0.0f};
