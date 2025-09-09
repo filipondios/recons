@@ -1,6 +1,6 @@
 #include <filesystem>
 #include <iostream>
-#include "Model.hpp"
+#include "VoxelModel.hpp"
 #include "View.hpp"
 
 
