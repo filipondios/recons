@@ -1,12 +1,16 @@
 #pragma once
 #include <array>
 #include <vector>
+#include <filesystem>
 #include <unsupported/Eigen/CXX11/Tensor>
 #include <raymath.h>
 #include "View.hpp"
 
-#define SPACE_DIM   3 // {x,y,z}
-#define MNUM_BOUNDS 6 // min{x,y,z}, max{x,y,z}
+// space axes {x,y,z}
+#define SPACE_DIM   3
+// min{x,y,z}, max{x,y,z}
+#define MNUM_BOUNDS 6
+
 
 struct VoxelModel {
 
@@ -19,7 +23,7 @@ struct VoxelModel {
 	int resolution;
 	bool print_info;
 	
-	VoxelModel(const std::filesystem::path& path, int resolution, bool print_info = true);
+	VoxelModel(const std::filesystem::path& path, int resolution, bool print_info);
 
 private:
 	void initial_reconstruction(void);
