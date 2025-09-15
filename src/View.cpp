@@ -3,6 +3,7 @@
 #include <opencv2/imgproc.hpp>
 #include <Eigen/Dense>
 #include <nlohmann/json.hpp>
+#include <vector>
 #include "View.hpp"
 
 
@@ -15,7 +16,7 @@ void ensure_vector_format(const nlohmann::json &item, const std::string &field) 
     }
 }
 
-Clipper2Lib::Path64 get_contour_polygon(const cv::Mat& img) {
+std::vector<Vector2> get_contour_polygon(const cv::Mat& img) {
     const int height = img.rows;
     const int width = img.cols;
     
@@ -44,7 +45,7 @@ Clipper2Lib::Path64 get_contour_polygon(const cv::Mat& img) {
     int ix = start.first, iz = start.second;
     int px = ix, pz = iz;
     int cx = ix, cz = iz; 
-    Clipper2Lib::Path64 points;
+    std::vector<Vector2> points;
     
     do {
         // Check if current pixel is a vertex
@@ -53,9 +54,9 @@ Clipper2Lib::Path64 get_contour_polygon(const cv::Mat& img) {
         
         if (horz == 0xff && vert == 0xff) {
             // Vertex found (x, -z)
-            points.push_back(Clipper2Lib::Point64{
-                static_cast<int64_t>(cx),
-                static_cast<int64_t>(-cz)
+            points.push_back({
+                static_cast<float>(cx),
+                static_cast<float>(-cz)
             });
         }
         
@@ -155,17 +156,14 @@ View::View(const std::filesystem::path &path) {
             max_y = std::max(max_y, static_cast<double>(vertex.y));
         }
 
-        const double center_x = (min_x + max_x) / 2.0;
-        const double center_y = (min_y + max_y) / 2.0;
+        const double center_x = (min_x + max_x) / 2.0f;
+        const double center_y = (min_y + max_y) / 2.0f;
 
-        Clipper2Lib::PathD path;
-        for (const auto& vertex : vertices) {
-            path.push_back(Clipper2Lib::PointD{
-                static_cast<double>(vertex.x) - center_x,
-                static_cast<double>(vertex.y) - center_y
-            });
+        for (auto& vertex : vertices) {
+            vertex.x -= center_x;            
+            vertex.y -= center_y;
         }
-        this->polygon.push_back(path);
+        this->polygon = vertices;
     }
 }
 
@@ -194,19 +192,18 @@ Vector2 View::real_to_plane(const Vector3 &point) const {
 }
 
 bool View::is_point_inside_contour(const Vector2& point) const {
-    if (polygon.empty() || polygon[0].empty()) {
+    if (polygon.empty()) {
         return false;
     }
         
-    const auto& path = polygon[0];
     bool inside = false;
-    size_t j = path.size() - 1;
+    size_t j = this->polygon.size() - 1;
 
     // Use ray-casting to check if the point is inside the
     // view's contour polygon
-    for (size_t i = 0; i < path.size(); i++) {
-        const auto& pi = path[i];
-        const auto& pj = path[j];
+    for (size_t i = 0; i < this->polygon.size(); i++) {
+        const auto& pi = this->polygon[i];
+        const auto& pj = this->polygon[j];
             
         if (((pi.y > point.y) != (pj.y > point.y)) &&
             (point.x < (pj.x - pi.x) * (point.y - pi.y) / (pj.y - pi.y) + pi.x)) {
@@ -218,22 +215,20 @@ bool View::is_point_inside_contour(const Vector2& point) const {
 }
 
 std::array<float, VNUM_BOUNDS> View::get_bounds() const {
-    if (polygon.empty() || polygon[0].empty()) {
+    if (polygon.empty()) {
         return {0.0f, 0.0f, 0.0f, 0.0f};
     }
 
-    float min_x = static_cast<float>(polygon[0][0].x);
+    float min_x = static_cast<float>(polygon[0].x);
+    float min_y = static_cast<float>(polygon[0].y);
     float max_x = min_x;
-    float min_y = static_cast<float>(polygon[0][0].y);
     float max_y = min_y;
 
-    for (const auto& path : polygon) {
-        for (const auto& point : path) {
-            min_x = std::min(min_x, static_cast<float>(point.x));
-            max_x = std::max(max_x, static_cast<float>(point.x));
-            min_y = std::min(min_y, static_cast<float>(point.y));
-            max_y = std::max(max_y, static_cast<float>(point.y));
-        }
+    for (const auto& point : this->polygon) {
+        min_x = std::min(min_x, static_cast<float>(point.x));
+        max_x = std::max(max_x, static_cast<float>(point.x));
+        min_y = std::min(min_y, static_cast<float>(point.y));
+        max_y = std::max(max_y, static_cast<float>(point.y));
     }
     return {min_x, min_y, max_x, max_y};
 }

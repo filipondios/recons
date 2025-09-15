@@ -3,7 +3,6 @@
 #include <array>
 #include <string>
 #include <vector>
-#include <clipper2/clipper.h>
 #include <raymath.h>
 
 #define VNUM_BOUNDS 4 // min{x,y}, max{x,y}
@@ -20,7 +19,7 @@ struct View {
     Vector3 vx;
     Vector3 vy;
     Vector3 vz;
-    Clipper2Lib::PathsD polygon;;
+    std::vector<Vector2> polygon;
 
     View(const std::filesystem::path& path);
     Vector3 plane_to_real(const Vector2& point) const;
