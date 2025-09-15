@@ -12,14 +12,9 @@ function(configure_dependency VAR VAL)
     set(${VAR} ${VAL} CACHE INTERNAL "" FORCE)
 endfunction()
 
-configure_dependency(CLIPPER2_TESTS OFF)
-configure_dependency(CLIPPER2_EXAMPLES OFF)
 configure_dependency(JSON_BuildTests OFF)
 configure_dependency(EIGEN_BUILD_DOC OFF)
 configure_dependency(EIGEN_BUILD_TESTING OFF)
-configure_dependency(CATCH_BUILD_TESTING OFF)
-configure_dependency(CATCH_BUILD_EXAMPLES OFF)
-configure_dependency(CATCH_INSTALL_DOCS OFF)
 
 set(RAYLIB_BACKEND "X11" CACHE STRING "Linux backend for raylib: X11 or Wayland")
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
@@ -84,10 +79,8 @@ configure_dependency(WITH_FLATBUFFERS OFF)
 set(OPENCV_CONFIG_FILE_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/opencv_build" CACHE PATH "" FORCE)
 
 # Add each dependency of the project
-add_subdirectory(external/Clipper2/CPP)
 add_subdirectory(external/json)
 add_subdirectory(external/eigen)
-add_subdirectory(external/Catch2)
 add_subdirectory(external/raylib)
 add_subdirectory(external/opencv opencv_build)
 
@@ -107,7 +100,6 @@ target_include_directories(recons_lib PUBLIC
 
 # Link all dependencies
 target_link_libraries(recons_lib PUBLIC
-    Clipper2
     raylib
     opencv_core
     opencv_imgproc
