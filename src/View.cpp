@@ -4,7 +4,7 @@
 #include <Eigen/Dense>
 #include <nlohmann/json.hpp>
 #include "View.hpp"
-#include "raymath.h"
+
 
 void ensure_vector_format(const nlohmann::json &item, const std::string &field) {
     if (!item.is_array() || item.size() != 3 ||

@@ -13,6 +13,8 @@ struct ModelRender {
     const int base_width;
     const int base_height;
     const float aspect_ratio[2];
+    int width_scale;
+    int height_scale;
     int text_fontsize;
     int box[4];
     
@@ -33,4 +35,5 @@ private:
     void move_camera(void);
     void zoom(void);
     void draw_help_box(void) const;
+    void draw_model(void) const;
 };

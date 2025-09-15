@@ -26,24 +26,24 @@ int main(int argc, char* argv[]) {
     bool info {false};
     bool help {false};
 
-    for (int i = 0; i < argc; ++i) {
+    for (int i = 1; i < argc; ++i) {
         const std::string arg = argv[i];
 
-        if ((arg == "--path" || "-p") && i + 1 < argc) {
-            path = argv[++i];
+        if ((arg == "--path" || arg == "-p") && (i + 1 < argc)) {
+            path = argv[i + 1];
         }
         
         else if ((arg == "--info" || arg == "-i")) {
             info = true;
         }
 
-        else if ((arg == "-help" || "--h")) {
+        else if ((arg == "--help" || arg == "-h")) {
             help = true;
         }
 
-        else if ((arg == "--resolution" || arg == "-r") && i + 1 < argc) {
+        else if ((arg == "--resolution" || arg == "-r") && (i + 1 < argc)) {
             try {
-                resolution = std::stoi(argv[++i]);
+                resolution = std::stoi(argv[i + 1]);
                 if (resolution <= 0) {
                     throw std::invalid_argument("resolution must be positive");
                 }
@@ -63,28 +63,5 @@ int main(int argc, char* argv[]) {
     ModelRender render(&model);
     render.initialize_render_context();
     render.start_render_loop();
-
-
-/*    
-    // Initialize Raylib context
-    SetConfigFlags(FLAG_FULLSCREEN_MODE);
-    SetTraceLogLevel(LOG_ERROR);
-    InitWindow(w, h, "Object reconstruction");
-    SetTargetFPS(60);
-    
-    // Scale all UI variables
-    const int monitor = GetCurrentMonitor();
-    const int w = GetMonitorWidth(monitor);
-    const int h = GetMonitorHeight(monitor);
-    SetWindowSize(w, h);
-
-    const int width_scale = w / base_width;    
-    const int height_scale = h / base_height;
-    box[0] *= width_scale;
-    box[1] *= height_scale;    
-    box[2] *= width_scale;
-    box[3] *= height_scale;
-    text_fontsize *= width_scale;
-    */
     return 0;
 }

@@ -1,5 +1,6 @@
+#include <raylib.h>
+#include <raymath.h>
 #include "ModelRender.hpp"
-#include "raymath.h"
 #define RADIANS(deg) (deg * M_PI / 180.0f)
 
 
@@ -14,6 +15,8 @@ ModelRender::ModelRender(const VoxelModel* model):
     base_width(1366),
     base_height(768),
     aspect_ratio{16, 9},
+    width_scale(1),
+    height_scale(1),
     text_fontsize(20),
     box{10, 10, 500, 100} {
 
@@ -91,22 +94,100 @@ void ModelRender::rotate_vertically(bool clockwise) {
 void ModelRender::move_camera(void) {
     // Rotates the camera automatically if auto-rotate 
     // is enabled, else checks for user input.   
+
+    if (IsKeyPressed(KEY_SPACE)) {
+        this->auto_rotate = !this->auto_rotate;
+    }
+
+    if (this->auto_rotate) {
+        this->rotate_horizontally(true);    
+
+    } else if (IsKeyDown(KEY_RIGHT)) {
+        this->rotate_horizontally(false);      
+
+    } else if (IsKeyDown(KEY_LEFT)) {
+        this->rotate_horizontally(true);
+
+    } else if (IsKeyDown(KEY_UP)) {
+        this->rotate_horizontally(true);      
+
+    } else if (IsKeyDown(KEY_DOWN)) {
+        this->rotate_horizontally(false);
+    }
 }
 
 void ModelRender::initialize_render_context(void) {
-    // Initializes the Raylib 3D context    
+    // Initializes the Raylib 3D context
+
+    SetConfigFlags(FLAG_FULLSCREEN_MODE);
+    SetTraceLogLevel(LOG_ERROR);
+    InitWindow(0, 0, "Object reconstruction");
+    SetTargetFPS(60);
+
+    // Scale all the UI variables to screen resoultion
+    const int monitor = GetCurrentMonitor();
+    const int height = GetMonitorHeight(monitor);
+    const int width = GetMonitorWidth(monitor);
+    SetWindowSize(width, height);
+
+    this->width_scale = (int)(width / this->base_width);
+    this->height_scale = (int)(height / this->base_height);
+    this->box[0] *= this->width_scale;
+    this->box[1] *= this->height_scale;
+    this->box[2] *= this->width_scale;
+    this->box[3] *= this->height_scale;
+    this->text_fontsize *= this->width_scale;
 }
 
 void ModelRender::zoom(void) {
     // zooms the camera in or out based on mouse wheel
     // movement. If there is no movement, the camera position
     // remains unchanged.
+
+    const int zoom = GetMouseWheelMove();
+
+    if (!zoom) {
+        return;
+    }
+
+    Vector3 vec = Vector3Normalize(this->camera.position);
+    vec = Vector3Scale(vec, 2.0f);
+    const auto func = (zoom > 0)? Vector3Add : Vector3Subtract; 
+    this->camera.position = func(this->camera.position, vec);
 }
 
 void ModelRender::draw_help_box(void) const {
     // Draws the help box with instructions for the user.
 }
 
+void ModelRender::draw_model(void) const {
+    for (const auto& cube : this->model->cubes) {
+        const Vector3 center {cube.x, cube.z, cube.y};
+
+        DrawCube(center, this->model->cube_dimensions.x,
+            this->model->cube_dimensions.y,
+            this->model->cube_dimensions.z, WHITE);
+
+        DrawCubeWires(center, this->model->cube_dimensions.x,
+            this->model->cube_dimensions.y,
+            this->model->cube_dimensions.z, BLACK);
+    }        
+}
+
 void ModelRender::start_render_loop() {
     // Draws the reconstructed model
+
+    while (!WindowShouldClose()) {
+        this->move_camera();
+        this->zoom();
+        BeginDrawing();
+
+        ClearBackground({10,10,10,255});
+        BeginMode3D(this->camera);
+        this->draw_model();
+        EndMode3D();
+
+        this->draw_help_box();
+        EndDrawing();
+    }    
 }

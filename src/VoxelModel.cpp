@@ -17,7 +17,6 @@ VoxelModel::VoxelModel(const std::filesystem::path &path, const int resolution,
             try {
                 View view(entry.path());
                 views.push_back(view);
-                std::cout << view.to_string() << std::endl;
             } catch (const std::exception &e) {
                 std::cerr << "Invalid view: " << entry.path() << ": "
                     << e.what() << std::endl;
