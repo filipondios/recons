@@ -1,48 +1,36 @@
-#pragma once
-#include <filesystem>
 #include <raylib.h>
-#include <raymath.h>
 #include "VoxelModel.hpp"
 
+
 struct ModelRender {
-    // Camera settings
-    float camera_speed;
-    float camera_margin;
-    float camera_fovy;
-    Vector3 initial_view_angles;
+
+    const float camera_speed;
+    const float camera_margin;
+    const float camera_fovy;
+    const float initial_view_angles[3];
     bool auto_rotate;
-    
-    // UI settings
-    int base_width;
-    int base_height;
-    Vector2 aspect_ratio;
+
+    const int base_width;
+    const int base_height;
+    const float aspect_ratio[2];
     int text_fontsize;
-    Rectangle box;
+    int box[4];
     
-    // Runtime values
-    int width_scale;
-    int height_scale;
-    
-    // 3D objects
-    Camera3D camera;
-    VoxelModel* model;
+    Camera3D camera;    
+    const VoxelModel* model;
     Vector3 horizontal_rotation_axis;
     Vector3 vertical_rotation_axis;
-    
-    // Constructor and main methods
-    ModelRender(VoxelModel* model);
-    ~ModelRender() = default;
-    void initialize();
-    void render_loop();
-    
+
+    ModelRender(const VoxelModel* model);
+    void initialize_render_context(void);
+    void start_render_loop(void);
+
 private:
-    void load_config(const std::filesystem::path& config_path);
-    void setup_camera();
-    Vector3 calculate_camera_position();   
+    void setup_camera(void);
+    Vector3 calculate_camera_position(void) const;
     void rotate_horizontally(bool clockwise);
-    void rotate_vertically(bool clockwise);
-    void move_camera();
-    void zoom();   
-    void draw_help_box();
-    void draw_model();
+    void rotate_vertically(bool clockwise);    
+    void move_camera(void);
+    void zoom(void);
+    void draw_help_box(void) const;
 };

@@ -185,9 +185,9 @@ void VoxelModel::surface_generation() {
 
 void VoxelModel::additional_info() const {
     std::cout << "[+] Model additional information:" << std::endl;
-    std::cout << "Model bounds: (" << bounds[0] << ", " << bounds[1] << ", " 
+    std::cout << "[!] Model bounds: (" << bounds[0] << ", " << bounds[1] << ", " 
               << bounds[2] << ", " << bounds[3] << ", " 
               << bounds[4] << ", " << bounds[5] << ")" << std::endl;
-    std::cout << "Number of voxels: " << (resolution * resolution * resolution) << std::endl;
-    std::cout << "Number of active voxels: " << cubes.size() << std::endl;
+    std::cout << "[!] Number of voxels: " << (resolution * resolution * resolution) << std::endl;
+    std::cout << "[!] Number of active voxels: " << cubes.size() << std::endl;
 }
