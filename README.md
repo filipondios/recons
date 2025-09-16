@@ -47,3 +47,13 @@ recons [-h] -p <path> [-r <resolution>] [-i]
 | `-r`      | :x:                | Voxel space resolution. Higher resolution leads to more accurate reconstruction (default = 16).      |
 | `-i`      | :x:                | Displays additional information about the reconstructed model after the process ends.                |
 | `-h`      | :x:                | Shows a help message with information aboout the program.                                            |
+
+Once you know how to run the program, you can try it with some test objects, which are located in the [models](models) directory.
+As you can see, there are two subdirectories ([valid](models/valid) and [tests](models/tests)), which contain different models. To verify the 
+correct functioning of the program, try the models stored in valid.
+
+>[!NOTE]
+> Based on the valid example models, you can create new models on your own, using the templates stored in the [models](models) directory.
+
+
+
