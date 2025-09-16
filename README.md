@@ -53,7 +53,7 @@ As you can see, there are two subdirectories ([valid](models/valid) and [tests](
 correct functioning of the program, try the models stored in valid.
 
 >[!NOTE]
-> Based on the valid example models, you can create new models on your own, using the templates stored in the [models](models) directory.
+> Based on the valid example models, you can create new models on your own, using the templates stored in the [models](models) directory. Remember that you have to export each view as `.bmp`.
 
 
 
